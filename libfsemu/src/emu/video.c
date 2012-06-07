@@ -572,18 +572,22 @@ void fs_emu_video_init() {
             fs_log("using texture format RGB\n");
             g_fs_emu_texture_format = GL_RGB;
         }
+#ifndef HAVE_GLES
         else if (g_ascii_strcasecmp(s, "rgb8") == 0) {
             fs_log("using texture format RGB8\n");
             g_fs_emu_texture_format = GL_RGB8;
         }
+#endif
         else if (g_ascii_strcasecmp(s, "rgba") == 0) {
             fs_log("using texture format RGBA\n");
             g_fs_emu_texture_format = GL_RGBA;
         }
+#ifndef HAVE_GLES
         else if (g_ascii_strcasecmp(s, "rgba8") == 0) {
             fs_log("using texture format RGBA8\n");
             g_fs_emu_texture_format = GL_RGBA8;
         }
+#endif
     }
     if (!g_fs_emu_texture_format) {
         fs_log("using default texture format RGB\n");

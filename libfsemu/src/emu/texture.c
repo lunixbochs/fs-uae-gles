@@ -2,7 +2,12 @@
 
 #include <fs/glee.h>
 #include <SDL.h>
+#ifdef HAVE_GLES
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#else
 #include <SDL_opengl.h>
+#endif
 
 #include <fs/ml.h>
 
@@ -48,12 +53,27 @@ void fs_emu_draw_from_atlas(float dx, float dy, float dw, float dh,
     //printf("%f %f %f %f - %f %f %f %f\n", dx, dy, dw, dh, tx, ty, tw, th);
 
     fs_emu_set_texture(g_atlas);
-    glBegin(GL_QUADS);
-    glTexCoord2f(tx, ty + th); glVertex2f(dx, dy);
-    glTexCoord2f(tx + tw, ty + th); glVertex2f(dx + dw, dy);
-    glTexCoord2f(tx + tw, ty); glVertex2f(dx + dw, dy + dh);
-    glTexCoord2f(tx, ty); glVertex2f(dx, dy + dh);
-    glEnd();
+    GLfloat tex[] = {
+        tx, ty + th,
+        tx + tw, ty + th,
+        tx + tw, ty,
+        tx, ty
+    };
+    GLfloat vert[] = {
+        dx, dy,
+        dx + dw, dy,
+        dx + dw, dy + dh,
+        dx, dy + dh
+    };
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(2, GL_FLOAT, 0, vert);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     CHECK_GL_ERROR();
 }
 
@@ -92,7 +112,9 @@ void load_texture(fs_emu_texture *texture) {
     glGenTextures(1, &opengl_texture);
     //texture->opengl_context_stamp = g_fs_ml_opengl_context_stamp;
     fs_gl_bind_texture(opengl_texture);
+#ifndef HAVE_GLES
     fs_gl_unpack_row_length(0);
+#endif
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height,
             0, fs_emu_get_video_format(), GL_UNSIGNED_BYTE, image->data);
     CHECK_GL_ERROR();
@@ -229,16 +251,28 @@ void fs_emu_render_texture_with_size(fs_emu_texture *texture, int x, int y,
     //fs_emu_texturing(0);
     //return;
     //fs_log("%d %d %d %d\n", x, y, x + w , y + h);
-    glBegin(GL_QUADS);
-    fs_gl_color4f(1.0, 1.0, 1.0, 1.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex2f(x, y);
-    glTexCoord2f(1.0, 1.0);
-    glVertex2f(x + w, y);
-    glTexCoord2f(1.0, 0.0);
-    glVertex2f(x + w, y + h);
-    glTexCoord2f(0.0, 0.0);
-    glVertex2f(x, y + h);
-    glEnd();
+    GLfloat tex[] = {
+        0.0, 1.0,
+        1.0, 1.0,
+        1.0, 1.0,
+        1.0, 0.0
+    };
+    GLfloat vert[] = {
+        x, y,
+        x + w, y,
+        x + w, y + h,
+        x, y + h
+    };
+    
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    
+    glVertexPointer(2, GL_FLOAT, 0, vert);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     CHECK_GL_ERROR();
 }

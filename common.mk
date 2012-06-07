@@ -1,7 +1,14 @@
 uname := $(shell uname -a)
 
 android := 0
+pandora := 1
 
+ifeq ($(pandora), 1)
+os = pandora
+cc = arm-angstrom-linux-gnueabi-gcc
+cxx = arm-angstrom-linux-gnueabi-g++
+ar = arm-angstrom-linux-gnueabi-ar
+else
 ifeq ($(android), 1)
 os = android
 cc = arm-linux-androideabi-gcc
@@ -23,6 +30,7 @@ os = linux
 cc = gcc
 cxx = g++
 ar = ar
+endif
 endif
 endif
 

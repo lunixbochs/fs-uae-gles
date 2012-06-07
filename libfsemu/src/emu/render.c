@@ -10,6 +10,13 @@
 #include "audio.h"
 #include "font.h"
 
+#ifdef HAVE_GLES
+#define glScaled glScalef
+#define glTranslated glTranslatef
+#define glRotated glRotatef
+#define double float
+#endif
+
 #define VIDEO_DEBUG_SCALE_TIMES 2.5
 
 // menu transition
@@ -93,7 +100,9 @@ static void create_texture_if_needed(int width, int height) {
     // the texture to black
     void *data = NULL;
     //void *data = g_malloc0(g_frame_texture_width * g_frame_texture_height * 4);
+#ifndef HAVE_GLES
     fs_gl_unpack_row_length(0);
+#endif
     glTexImage2D(GL_TEXTURE_2D, 0, fs_emu_get_texture_format(),
             g_frame_texture_width, g_frame_texture_height, 0,
             fs_emu_get_video_format(), GL_UNSIGNED_BYTE, data);
@@ -332,10 +341,19 @@ static void update_texture() {
     fs_gl_bind_texture(g_frame_texture);
 
     uint8_t *data_start = frame + ((upload_y * width) + upload_x) * 4;
+#ifndef HAVE_GLES
     fs_gl_unpack_row_length(width);
     glTexSubImage2D(GL_TEXTURE_2D, 0, upload_x, upload_y,
     		upload_w, upload_h, format,
             GL_UNSIGNED_BYTE, data_start);
+#else
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, upload_w, upload_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data_start);
+
+    for (int y = 0; y < upload_h; y++) {
+        char *row = data_start + ((y + upload_y)*width + upload_x) * 4;
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, upload_y, upload_w, 1, GL_RGBA, GL_UNSIGNED_BYTE, row);
+    }
+#endif
     CHECK_GL_ERROR();
 
 #if 1
@@ -495,56 +513,72 @@ static void render_frame(double alpha, int perspective) {
             fs_gl_color4f(0.0, 0.0, 0.0, 1.0);
         }
 
+        glEnableClientState(GL_VERTEX_ARRAY);
         if (x1 > -1.0) {
-            glBegin(GL_QUADS);
-            glVertex2f(-1.0, y1);
-            glVertex2f(  x1, y1);
-            glVertex2f(  x1, y2);
-            glVertex2f(-1.0, y2);
-            glEnd();
+            GLfloat vert[] = {
+                -1.0, y1,
+                x1, y1,
+                x1, y2,
+                -1.0, y2
+            };
+
+            glVertexPointer(2, GL_FLOAT, 0, vert);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
             CHECK_GL_ERROR();
         }
         if (x2 < 1.0) {
-            glBegin(GL_QUADS);
-            glVertex2f(  x2, y1);
-            glVertex2f( 1.0, y1);
-            glVertex2f( 1.0, y2);
-            glVertex2f(  x2, y2);
-            glEnd();
+            GLfloat vert[] = {
+                x2, y1,
+                1.0, y1,
+                1.0, y2,
+                x2, y2
+            };
+
+            glVertexPointer(2, GL_FLOAT, 0, vert);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
             CHECK_GL_ERROR();
         }
         if (y1 > -1.0) {
-            glBegin(GL_QUADS);
-            glVertex2f(x1, -1.0);
-            glVertex2f(x2, -1.0);
-            glVertex2f(x2,   y1);
-            glVertex2f(x1,   y1);
-            glEnd();
-            // left side (3D)
-            glBegin(GL_QUADS);
-            glVertex3f(-1.0, -1.0, -0.1);
-            glVertex3f(-1.0, -1.0,  0.0);
-            glVertex3f(-1.0,   y1,  0.0);
-            glVertex3f(-1.0,   y1, -0.1);
-            glEnd();
+            GLfloat vert1[] = {
+                x1, -1.0,
+                x2, -1.0,
+                x2, y1,
+                x1, y1
+            };
+            GLfloat vert2[] = {
+                -1.0, -1.0, -0.1,
+                -1.0, -1.0, 0.0,
+                -1.0, y1, 0.0,
+                -1.0, y1, -0.1
+            };
+
+            glVertexPointer(2, GL_FLOAT, 0, vert1);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+            glVertexPointer(3, GL_FLOAT, 0, vert2);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
             CHECK_GL_ERROR();
         }
         if (y2 < 1.0) {
-            glBegin(GL_QUADS);
-            glVertex2f(x1,   y2);
-            glVertex2f(x2,   y2);
-            glVertex2f(x2,  1.0);
-            glVertex2f(x1,  1.0);
-            glEnd();
-            // left side (3D)
-            glBegin(GL_QUADS);
-            glVertex3f(-1.0,  y2, -0.1);
-            glVertex3f(-1.0,  y2,  0.0);
-            glVertex3f(-1.0, 1.0,  0.0);
-            glVertex3f(-1.0, 1.0, -0.1);
-            glEnd();
+            GLfloat vert1[] = {
+                x1, y2,
+                x2, y2,
+                x2, 1.0,
+                x1, 1.0
+            };
+            GLfloat vert2[] = {
+                -1.0, y2, -0.1,
+                -1.0, y2, 0.0,
+                -1.0, 1.0, 0.0,
+                -1.0, 1.0, -0.1
+            };
+
+            glVertexPointer(2, GL_FLOAT, 0, vert1);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+            glVertexPointer(3, GL_FLOAT, 0, vert2);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
             CHECK_GL_ERROR();
         }
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
     //printf("--- render frame done ---\n");
 
@@ -561,12 +595,28 @@ static void render_frame(double alpha, int perspective) {
             fs_gl_bind_texture(g_frame_texture);
             fs_gl_color4f(0.33 * alpha, 0.33 * alpha, 0.33 * alpha, alpha);
         }
-        glBegin(GL_QUADS);
-        glTexCoord2d(s1, t2); glVertex3f(-1.0, y1, -0.1);
-        glTexCoord2d(s1, t2); glVertex3f(-1.0, y1,  0.0);
-        glTexCoord2d(s1, t1); glVertex3f(-1.0, y2,  0.0);
-        glTexCoord2d(s1, t1); glVertex3f(-1.0, y2, -0.1);
-        glEnd();
+        GLfloat tex[] = {
+            s1, t2,
+            s1, t2,
+            s1, t1, // TODO: is s1 on this line a bug?
+            s1, t1
+        };
+        GLfloat vert[] = {
+            -1.0, y1, -0.1,
+            -1.0, y1, 0.0,
+            -1.0, y2, 0.0,
+            -1.0, y2, -0.1
+        };
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glVertexPointer(3, GL_FLOAT, 0, vert);
+        glTexCoordPointer(2, GL_FLOAT, 0, tex);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         CHECK_GL_ERROR();
     }
 
@@ -589,24 +639,56 @@ static void render_frame(double alpha, int perspective) {
         fs_gl_color4f(color, color, color, 1.0);
     }
 
-    glBegin(GL_QUADS);
-    glTexCoord2d(s1, t2); glVertex2f(x1, y1);
-    glTexCoord2d(s2, t2); glVertex2f(x2, y1);
-    glTexCoord2d(s2, t1); glVertex2f(x2, y2);
-    glTexCoord2d(s1, t1); glVertex2f(x1, y2);
-    glEnd();
+    GLfloat tex[] = {
+        s1, t2,
+        s2, t2,
+        s2, t1,
+        s1, t1
+    };
+    GLfloat vert[] = {
+        x1, y1,
+        x2, y1,
+        x2, y2,
+        x1, y2
+    };
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(2, GL_FLOAT, 0, vert);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     CHECK_GL_ERROR();
 
     //repeat_right_border = 0;
     if (repeat_right_border > 0.0) {
         s1 = s2 = (double) (g_frame_width - 1) / g_frame_texture_width;
 
-        glBegin(GL_QUADS);
-        glTexCoord2d(s1, t2); glVertex2f(repeat_right_border, y1);
-        glTexCoord2d(s2, t2); glVertex2f(1.0, y1);
-        glTexCoord2d(s2, t1); glVertex2f(1.0, y2);
-        glTexCoord2d(s1, t1); glVertex2f(repeat_right_border, y2);
-        glEnd();
+        GLfloat tex[] = {
+            s1, t2,
+            s2, t2,
+            s2, t1,
+            s1, t1
+        };
+        GLfloat vert[] = {
+            repeat_right_border, y1,
+            1.0, y1,
+            1.0, y2,
+            repeat_right_border, y2
+        };
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glVertexPointer(2, GL_FLOAT, 0, vert);
+        glTexCoordPointer(2, GL_FLOAT, 0, tex);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         CHECK_GL_ERROR();
 
         // so the following code does not render black rectangle over
@@ -628,58 +710,149 @@ static void render_glow(double opacity) {
     //fs_emu_set_texture(g_tex_glow_top);
     fs_emu_prepare_texture(TEXTURE_GLOW_TOP, &tx1, &ty1, &tx2, &ty2);
     // render top edge
-    glBegin(GL_QUADS);
-    glTexCoord2f(tx1, ty2); glVertex3f(-1.0 + dx, 1.0 - dy, z);
-    glTexCoord2f(tx2, ty2); glVertex3f( 1.0 - dx, 1.0 - dy, z);
-    glTexCoord2f(tx2, ty1); glVertex3f( 1.0 - dx, 1.0 + dy, z);
-    glTexCoord2f(tx1, ty1); glVertex3f(-1.0 + dx, 1.0 + dy, z);
-    glEnd();
+    GLfloat tex[] = {
+        tx1, ty2,
+        tx2, ty2,
+        tx2, ty1,
+        tx1, ty1
+    };
+    GLfloat vert[] = {
+        -1.0 + dx, 1.0 - dy, z,
+        1.0 - dx, 1.0 - dy, z,
+        1.0 - dx, 1.0 + dy, z,
+        -1.0 + dx, 1.0 + dy, z
+    };
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(3, GL_FLOAT, 0, vert);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     CHECK_GL_ERROR();
     // render corners
     fs_emu_prepare_texture(TEXTURE_GLOW_TOP_LEFT, &tx1, &ty1, &tx2, &ty2);
-    glBegin(GL_QUADS);
-    // top left corner
-    glTexCoord2f(tx1, ty2); glVertex3f(-1.0 - dx, 1.0 - dy, z);
-    glTexCoord2f(tx2, ty2); glVertex3f(-1.0 + dx, 1.0 - dy, z);
-    glTexCoord2f(tx2, ty1); glVertex3f(-1.0 + dx, 1.0 + dy, z);
-    glTexCoord2f(tx1, ty1); glVertex3f(-1.0 - dx, 1.0 + dy, z);
-    // top right corner
-    glTexCoord2f(tx2, ty2); glVertex3f( 1.0 - dx, 1.0 - dy, z);
-    glTexCoord2f(tx1, ty2); glVertex3f( 1.0 + dx, 1.0 - dy, z);
-    glTexCoord2f(tx1, ty1); glVertex3f( 1.0 + dx, 1.0 + dy, z);
-    glTexCoord2f(tx2, ty1); glVertex3f( 1.0 - dx, 1.0 + dy, z);
-    glEnd();
+    GLfloat tex2[] = {
+        // top left corner
+        tx1, ty2,
+        tx2, ty2,
+        tx2, ty1,
+        tx1, ty1,
+        // top right corner
+        tx2, ty2,
+        tx1, ty2,
+        tx1, ty1,
+        tx2, ty1
+    };
+    GLfloat vert2[] = {
+        // top left corner
+        -1.0 - dx, 1.0 - dy, z,
+        -1.0 + dx, 1.0 - dy, z,
+        -1.0 + dx, 1.0 + dy, z,
+        -1.0 - dx, 1.0 + dy, z,
+        // top right corner
+        1.0 - dx, 1.0 - dy, z,
+        1.0 + dx, 1.0 - dy, z,
+        1.0 + dx, 1.0 + dy, z,
+        1.0 - dx, 1.0 + dy, z
+    };
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(2, GL_FLOAT, 0, vert2);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex2);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 8);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     CHECK_GL_ERROR();
     // render left and right edge
     fs_emu_prepare_texture(TEXTURE_GLOW_LEFT, &tx1, &ty1, &tx2, &ty2);
     //fs_emu_set_texture(g_tex_glow_left);
 
-    glBegin(GL_QUADS);
-    // left edge
-    glTexCoord2f(tx1, ty2); glVertex3f(-1.0 - dx, -0.5, z);
-    glTexCoord2f(tx2, ty2); glVertex3f(-1.0 + dx, -0.5, z);
-    glTexCoord2f(tx2, ty1); glVertex3f(-1.0 + dx, 1.0 - dy, z);
-    glTexCoord2f(tx1, ty1); glVertex3f(-1.0 - dx, 1.0 - dy, z);
-    // right edge
-    glTexCoord2f(tx2, ty2); glVertex3f( 1.0 - dx, -0.5, z);
-    glTexCoord2f(tx1, ty2); glVertex3f( 1.0 + dx, -0.5, z);
-    glTexCoord2f(tx1, ty1); glVertex3f( 1.0 + dx, 1.0 - dy, z);
-    glTexCoord2f(tx2, ty1); glVertex3f( 1.0 - dx, 1.0 - dy, z);
-    // left edge bottom
-    fs_gl_color4f(0.0, 0.0, 0.0, 0.0);
-    glTexCoord2f(tx1, ty2); glVertex3f(-1.0 - dx, -1.0, z);
-    glTexCoord2f(tx2, ty2); glVertex3f(-1.0 + dx, -1.0, z);
-    fs_gl_color4f(s, s, s, s);
-    glTexCoord2f(tx2, ty1); glVertex3f(-1.0 + dx, -0.5, z);
-    glTexCoord2f(tx1, ty1); glVertex3f(-1.0 - dx, -0.5, z);
-    // right edge bottom
-    fs_gl_color4f(0.0, 0.0, 0.0, 0.0);
-    glTexCoord2f(tx2, ty2); glVertex3f( 1.0 - dx, -1.0, z);
-    glTexCoord2f(tx1, ty2); glVertex3f( 1.0 + dx, -1.0, z);
-    fs_gl_color4f(s, s, s, s);
-    glTexCoord2f(tx1, ty1); glVertex3f( 1.0 + dx, -0.5, z);
-    glTexCoord2f(tx2, ty1); glVertex3f( 1.0 - dx, -0.5, z);
-    glEnd();
+    GLfloat color3[] = {
+        // left edge
+        s, s, s, s,
+        s, s, s, s,
+        s, s, s, s,
+        s, s, s, s,
+        // right edge
+        s, s, s, s,
+        s, s, s, s,
+        s, s, s, s,
+        s, s, s, s,
+        // left edge bottom
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        s, s, s, s,
+        s, s, s, s,
+        // right edge bottom
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        s, s, s, s,
+        s, s, s, s,
+    };
+    GLfloat tex3[] = {
+        // left edge
+        tx1, ty2,
+        tx2, ty2,
+        tx2, ty1,
+        tx1, ty1,
+        // right edge
+        tx2, ty2,
+        tx1, ty2,
+        tx1, ty1,
+        tx2, ty1,
+        // left edge bottom
+        tx1, ty2,
+        tx2, ty2,
+        tx2, ty1,
+        tx1, ty1,
+        // right edge bottom
+        tx2, ty2,
+        tx1, ty2,
+        tx1, ty1,
+        tx2, ty1
+    };
+    GLfloat vert3[] = {
+        // left edge
+        -1.0 - dx, -0.5, z,
+        -1.0 + dx, -0.5, z,
+        -1.0 + dx, 1.0 - dy, z,
+        -1.0 - dx, 1.0 - dy, z,
+        // right edge
+        1.0 - dx, -0.5, z,
+        1.0 + dx, -0.5, z,
+        1.0 + dx, 1.0 - dy, z,
+        1.0 - dx, 1.0 - dy, z,
+        // left edge bottom
+        -1.0 - dx, -1.0, z,
+        -1.0 + dx, -1.0, z,
+        -1.0 + dx, -0.5, z,
+        -1.0 - dx, -0.5, z,
+        // right edge bottom
+        1.0 - dx, -1.0, z,
+        1.0 + dx, -1.0, z,
+        1.0 + dx, -0.5, z,
+        1.0 - dx, -0.5, z
+    };
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glColorPointer(4, GL_FLOAT, 0, color3);
+    glVertexPointer(3, GL_FLOAT, 0, vert3);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex3);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 16);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
     CHECK_GL_ERROR();
     //printf("--- render glow done ---\n");        
 }
@@ -717,12 +890,16 @@ static void handle_quit_sequence() {
     fs_gl_blending(1);
     fs_gl_texturing(0);
     fs_gl_color4f(0.0, 0.0, 0.0, fade);
-    glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(1920, 0);
-    glVertex2f(1920, 1080);
-    glVertex2f(0, 1080);
-    glEnd();
+    GLfloat vert[] = {
+        0, 0,
+        1920, 0,
+        1920, 1080,
+        0, 1080
+    };
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, vert);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
     CHECK_GL_ERROR();
 }
 
@@ -811,29 +988,48 @@ void fs_emu_video_render_function() {
         int splt = 361;
         fs_gl_blending(FALSE);
         fs_gl_texturing(FALSE);
-        glBegin(GL_QUADS);
+        GLfloat color[] = {
+            39.0 / 255.0, 44.0 / 255.0, 51.0 / 255.0, 1.0,
+            39.0 / 255.0, 44.0 / 255.0, 51.0 / 255.0, 1.0,
+            0.0, 0.0, 0.0, 1.0,
+            0.0, 0.0, 0.0, 1.0,
 
-        fs_gl_color4f(39.0 / 255.0, 44.0 / 255.0, 51.0 / 255.0, 1.0);
-        glVertex3f(   0, splt, -0.9);
-        glVertex3f(1920, splt, -0.9);
-        fs_gl_color4f(0.0, 0.0, 0.0, 1.0);
-        glVertex3f(1920, 1020, -0.9);
-        glVertex3f(   0, 1020, -0.9);
+            0.0, 0.0, 0.0, 1.0,
+            0.0, 0.0, 0.0, 1.0,
+            0.0, 0.0, 0.0, 1.0,
+            0.0, 0.0, 0.0, 1.0,
 
-        glVertex3f(   0, 1020, -0.9);
-        glVertex3f(1920, 1020, -0.9);
-        fs_gl_color4f(0.0, 0.0, 0.0, 1.0);
-        glVertex3f(1920, 1080, -0.9);
-        glVertex3f(   0, 1080, -0.9);
+            0.0, 0.0, 0.0, 1.0,
+            0.0, 0.0, 0.0, 1.0,
+            20.0 / 255.0, 22.0 / 255.0, 26.0 / 255.0, 1.0,
+            20.0 / 255.0, 22.0 / 255.0, 26.0 / 255.0, 1.0
+        };
+        GLfloat vert[] = {
+               0, splt, -0.9,
+            1920, splt, -0.9,
+            1920, 1020, -0.9,
+               0, 1020, -0.9,
 
-        fs_gl_color4f(0.0, 0.0, 0.0, 1.0);
-        glVertex3f(   0,    0, -0.9);
-        glVertex3f(1920,    0, -0.9);
-        fs_gl_color4f(20.0 / 255.0, 22.0 / 255.0, 26.0 / 255.0, 1.0);
-        glVertex3f(1920, splt, -0.9);
-        glVertex3f(   0, splt, -0.9);
+               0, 1020, -0.9,
+            1920, 1020, -0.9,
+            1920, 1080, -0.9,
+               0, 1080, -0.9,
 
-        glEnd();
+               0,    0, -0.9,
+            1920,    0, -0.9,
+            1920, splt, -0.9,
+               0, splt, -0.9
+        };
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+
+        glColorPointer(4, GL_FLOAT, 0, color);
+        glVertexPointer(3, GL_FLOAT, 0, vert);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 12);
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
         CHECK_GL_ERROR();
 
         fs_gl_perspective();
@@ -900,13 +1096,17 @@ void fs_emu_video_render_function() {
         fs_gl_ortho_hd();
         fs_gl_texturing(0);
         fs_gl_blending(1);
-        glBegin(GL_QUADS);
-        fs_gl_color4f(0.0, 0.0, 0.0, 0.5);
-        glVertex2f(0, 1030);
-        glVertex2f(1920, 1030);
-        glVertex2f(1920, 1080);
-        glVertex2f(0, 1080);
-        glEnd();
+	fs_gl_color4f(0.0, 0.0, 0.0, 0.5);
+        GLfloat vert[] = {
+            0, 1030,
+            1920, 1030,
+            1920, 1080,
+            0, 1080
+        };
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, 0, vert);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        glDisableClientState(GL_VERTEX_ARRAY);
         CHECK_GL_ERROR();
 #if 0
         glBegin(GL_QUADS);
@@ -962,7 +1162,9 @@ void fs_emu_video_render_function() {
             glGenTextures(1, &debug_texture);
             CHECK_GL_ERROR();
             fs_gl_bind_texture(debug_texture);
+#ifndef HAVE_GLES
             fs_gl_unpack_row_length(0);
+#endif
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0,
                     GL_RGBA, GL_UNSIGNED_BYTE, NULL);
             CHECK_GL_ERROR();
@@ -986,7 +1188,9 @@ void fs_emu_video_render_function() {
         fs_emu_audio_render_debug_info(debug_texture_data);
         CHECK_GL_ERROR();
 
+#ifndef HAVE_GLES
         fs_gl_unpack_row_length(0);
+#endif
         CHECK_GL_ERROR();
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 256,
                 GL_RGBA, GL_UNSIGNED_BYTE, debug_texture_data);
@@ -994,17 +1198,29 @@ void fs_emu_video_render_function() {
         fs_gl_ortho_hd();
         fs_gl_texturing(1);
         fs_gl_blending(0);
-        glBegin(GL_QUADS);
         fs_gl_color4f(1.0, 1.0, 1.0, 1.0);
-        glTexCoord2f(0.0, 0.0);
-        glVertex2f(0, 0);
-        glTexCoord2f(1.0, 0.0);
-        glVertex2f(1920, 0);
-        glTexCoord2f(1.0, 1.0);
-        glVertex2f(1920, 1080);
-        glTexCoord2f(0.0, 1.0);
-        glVertex2f(0, 1080);
-        glEnd();
+        GLfloat tex[] = {
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0
+        };
+        GLfloat vert[] = {
+            0, 0,
+            1920, 0,
+            1920, 1080,
+            0, 1080
+        };
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glTexCoordPointer(2, GL_FLOAT, 0, tex);
+        glVertexPointer(2, GL_FLOAT, 0, vert);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         CHECK_GL_ERROR();
 
         glPushMatrix();

@@ -2,7 +2,12 @@
 
 #include <fs/glee.h>
 #include <SDL.h>
+#ifdef HAVE_GLES
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#else
 #include <SDL_opengl.h>
+#endif
 #include <glib.h>
 
 #include "video.h"
@@ -187,16 +192,28 @@ int fs_emu_font_render(fs_emu_font *font, const char *text, float x, float y,
         //printf("rendering %f %f %f %f...\n", item->x1, item->x2, item->y1, item->y2);
         fs_gl_color4f(r * alpha, g * alpha, b * alpha, alpha);
         //glColor4f(r * alpha, g * alpha, b * alpha, alpha);
-        glBegin(GL_QUADS);
-        glTexCoord2f(item->x1, item->y2);
-        glVertex2f(x, y);
-        glTexCoord2f(item->x2, item->y2);
-        glVertex2f(x + item->width, y);
-        glTexCoord2f(item->x2, item->y1);
-        glVertex2f(x + item->width, y + item->height);
-        glTexCoord2f(item->x1, item->y1);
-        glVertex2f(x, y + item->height);
-        glEnd();
+        GLfloat tex[] = {
+            item->x1, item->y2,
+            item->x2, item->y2,
+            item->x2, item->y1,
+            item->x1, item->y1
+        };
+        GLfloat vert[] = {
+            x, y,
+            x + item->width, y,
+            x + item->width, y + item->height,
+            x, y + item->height
+        };
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glVertexPointer(2, GL_FLOAT, 0, vert);
+        glTexCoordPointer(2, GL_FLOAT, 0, tex);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
         g_cache = g_list_prepend(g_cache, item);
         sanity_check();
@@ -332,10 +349,19 @@ int fs_emu_font_render(fs_emu_font *font, const char *text, float x, float y,
 
 
     fs_gl_bind_texture(g_text_texture);
+#ifndef HAVE_GLES
     fs_gl_unpack_row_length(TEXTURE_WIDTH);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, position * 32, required_width,
             required_height, fs_emu_get_video_format(),
             GL_UNSIGNED_BYTE, g_buffer);
+#else
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, required_width, required_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, g_buffer);
+
+    for (int y = 0; y < required_height; y++) {
+        char *row = g_buffer + ((y + position * 32)*TEXTURE_WIDTH) * 4;
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, position * 32, required_width, 1, GL_RGBA, GL_UNSIGNED_BYTE, row);
+    }
+#endif
 
     cache_item *item = g_malloc(sizeof(cache_item));
     item->font = font;

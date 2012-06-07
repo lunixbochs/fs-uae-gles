@@ -6,6 +6,7 @@ else ifneq ($(findstring Darwin,$(uname)),)
 else
     os = linux
 endif
+os = pandora
 
 debug := 0
 
@@ -49,6 +50,16 @@ else ifeq ($(os), macosx)
 	cppflags += -I/System/Library/Frameworks/OpenAL.framework/Headers
 	cppflags += -DWITH_SDL_VIDEO -DWITH_SDL_INPUT -DWITH_OPENAL
 	library = libfsemu.a
+else ifeq ($(os), pandora)
+	cppflags += -DLINUX
+	cppflags += -DHAVE_GLES -DPANDORA
+	cppflags += -DWITH_SDL_VIDEO -DWITH_SDL_INPUT -DWITH_OPENAL
+	library = libfsemu.a
+	shared = libfsemu.so.1.0
+	shared_soname = libfsemu.so.1
+	shared_linkname = libfsemu.so
+	shared_ldflags += -shared -Wl,--as-needed -Wl,-soname=$(library_soname)
+	#libs += `sdl-config --libs` `pkg-config --libs glib-2.0` -lGL
 else
 	cppflags += -DLINUX
 	cppflags += -DWITH_SDL_VIDEO -DWITH_SDL_INPUT -DWITH_OPENAL
@@ -65,13 +76,13 @@ all: libfsemu
 libfsemu: out/$(library)
 
 obj/%.o: src/%.c
-	gcc $(cppflags) $(cflags) -c $< -o $@
+	$(CC) $(cppflags) $(cflags) -c $< -o $@
 
 obj/emu_%.o: src/emu/%.c
-	gcc $(cppflags) $(cflags) -c $< -o $@
+	$(CC) $(cppflags) $(cflags) -c $< -o $@
 
 obj/ml_%.o: src/ml/%.c
-	gcc $(cppflags) $(cflags) -c $< -o $@
+	$(CC) $(cppflags) $(cflags) -c $< -o $@
 
 out/$(library): $(objects)
 ifeq ($(os), macosx)
@@ -83,7 +94,7 @@ ifeq ($(os), macosx)
 endif
 
 out/$(shared): $(objects)
-	gcc $(shared_ldflags) $(objects) $(libs) -o $@
+	$(CC) $(shared_ldflags) $(objects) $(libs) -o $@
 
 fs-test:
 	make -C test

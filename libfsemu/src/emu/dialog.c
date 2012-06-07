@@ -145,12 +145,16 @@ void fs_emu_render_dialog() {
     fs_gl_blending(1);
     fs_gl_texturing(0);
     fs_gl_color4f(0.0, 0.0, 0.0, 0.5);
-    glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(1920, 0);
-    glVertex2f(1920, 1080);
-    glVertex2f(0, 1080);
-    glEnd();
+    GLfloat vert[] = {
+        0, 0,
+        1920, 0,
+        1920, 1080,
+        0, 1080
+    };
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, vert);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     fs_gl_blending(0);
 
@@ -161,14 +165,27 @@ void fs_emu_render_dialog() {
     float y1 = (1080 - height) / 2;
     float y2 = y1 + height;
 
-    glBegin(GL_QUADS);
-    fs_gl_color4f(0.0, 0.4, 0.75, 1.0);
-    glVertex2f(x1, y1);
-    glVertex2f(x2, y1);
-    fs_gl_color4f(0.0, 0.2, 0.375, 1.0);
-    glVertex2f(x2, y2);
-    glVertex2f(x1, y2);
-    glEnd();
+    GLfloat color2[] = {
+        0.0, 0.4, 0.75, 1.0,
+        0.0, 0.4, 0.75, 1.0,
+        0.0, 0.2, 0.375, 1.0,
+        0.0, 0.2, 0.375, 1.0
+    };
+    GLfloat vert2[] = {
+        x1, y1,
+        x2, y1,
+        x2, y2,
+        x1, y2
+    };
+
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glColorPointer(4, GL_FLOAT, 0, color2);
+    glVertexPointer(2, GL_FLOAT, 0, vert2);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     fs_emu_font *font = fs_emu_font_get_menu();
     int tx = x1 + 50;

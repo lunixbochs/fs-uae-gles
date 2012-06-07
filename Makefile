@@ -86,6 +86,11 @@ cxxflags += -arch i386
 ldflags += -arch i386
 cppflags += -DMACOSX
 libs += -framework OpenGL -framework Carbon -framework OpenAL
+else ifeq($(os), pandora)
+cppflags += -DHAVE_GLES -DPANDORA
+cxxflags += -DHAVE_GLES -DPANDORA
+libs += -lGLES_CM -lGLUES_CM -lopenal -ldl -lX11 -lEGL
+generate = 0
 else
 libs += -lGL -lGLU -lopenal -ldl -lX11
 generate = 0
@@ -334,7 +339,7 @@ endif
 
 out/fs-uae: libfsemu-target libcapsimage-target obj/uae.a $(objects) \
 		run_deps
-	$(cxx) $(ldflags) $(objects) obj/uae.a $(libs) -o out/fs-uae
+	$(cxx) $(cxxflags) $(ldflags) $(objects) obj/uae.a $(libs) -o out/fs-uae
 
 fs-uae: out/fs-uae
 
