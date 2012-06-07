@@ -47,7 +47,7 @@
 #endif
 
 #ifdef HAVE_GLES
-        #include <GLES/egl.h>
+        #include <EGL/egl.h>
 #endif
 
 typedef GLuint(*GLEE_LINK_FUNCTION)(void);

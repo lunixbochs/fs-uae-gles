@@ -9,6 +9,10 @@
 #include "sysconfig.h"
 #include "sysdeps.h"
 #include <assert.h>
+#ifdef HAVE_GLES
+int EGL_Close(void);
+int EGL_Open(void);
+#endif
 
 #include "options.h"
 #include "threaddep/thread.h"
@@ -806,6 +810,9 @@ void do_leave_program (void)
 #endif
 	if (! no_gui)
 		gui_exit ();
+#ifdef HAVE_GLES
+	EGL_Close();
+#endif
 #ifdef USE_SDL
 	SDL_Quit ();
 #endif
@@ -840,6 +847,10 @@ static int real_main2 (int argc, TCHAR **argv)
 
 #ifdef USE_SDL
 	SDL_Init (SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);
+#endif
+#ifdef HAVE_GLES
+	if (EGL_Open())
+		exit(1);
 #endif
 	config_changed = 1;
 	if (restart_config[0]) {
