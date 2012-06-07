@@ -9,10 +9,6 @@
 #include "sysconfig.h"
 #include "sysdeps.h"
 #include <assert.h>
-#ifdef HAVE_GLES
-int EGL_Close(void);
-int EGL_Open(void);
-#endif
 
 #include "options.h"
 #include "threaddep/thread.h"
@@ -62,6 +58,9 @@ int EGL_Open(void);
 #endif
 #ifdef USE_SDL
 #include "SDL.h"
+#endif
+#ifdef HAVE_GLES
+#include "eglport.h"
 #endif
 
 long int version = 256 * 65536L * UAEMAJOR + 65536L * UAEMINOR + UAESUBREV;
@@ -811,7 +810,7 @@ void do_leave_program (void)
 	if (! no_gui)
 		gui_exit ();
 #ifdef HAVE_GLES
-	EGL_Close();
+	EGL_Destroy();
 #endif
 #ifdef USE_SDL
 	SDL_Quit ();
@@ -847,10 +846,6 @@ static int real_main2 (int argc, TCHAR **argv)
 
 #ifdef USE_SDL
 	SDL_Init (SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);
-#endif
-#ifdef HAVE_GLES
-	if (EGL_Open())
-		exit(1);
 #endif
 	config_changed = 1;
 	if (restart_config[0]) {

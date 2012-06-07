@@ -233,6 +233,11 @@ int fs_ml_video_create_window(const char *title) {
 
     static int initialized = 0;
     SDL_Init(SDL_INIT_VIDEO);
+#ifdef HAVE_GLES
+    if (!EGL_Open())
+        exit(1);
+#endif
+
     if (!initialized) {
         const SDL_VideoInfo* info = SDL_GetVideoInfo();
         g_fullscreen_width = fs_config_get_int("fullscreen_width");
