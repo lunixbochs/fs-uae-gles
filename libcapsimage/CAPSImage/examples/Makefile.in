@@ -1,0 +1,34 @@
+distdir		= @top_srcdir@/@host_cpu@-@host_os@-@PACKAGE@/examples
+
+CC		= @CC@
+INSTALL		= @INSTALL@
+
+CFLAGS		= @CFLAGS@ -I- -I@top_srcdir@/include -I@srcdir@
+LDFLAGS		= @LDFLAGS@
+
+EXTRA_LIBS	= @EXTRA_LIBS@
+
+PROGRAMS	= ipfinfo
+ipfinfo_OBJECTS	= ipfinfo.o
+
+.PHONY: all clean distclean dist
+
+all: $(PROGRAMS)
+
+ipfinfo: $(ipfinfo_OBJECTS)
+	$(CC) $(LDFLAGS) $^ $(EXTRA_LIBS) -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	$(RM) $(PROGRAMS) $(ipfinfo_OBJECTS)
+
+distclean: clean
+	$(RM) Makefile
+
+dist: $(PROGRAMS)
+	$(INSTALL) -d $(distdir)
+	$(INSTALL) ipfinfo.c $(distdir)
+	$(INSTALL) -s ipfinfo $(distdir)
+

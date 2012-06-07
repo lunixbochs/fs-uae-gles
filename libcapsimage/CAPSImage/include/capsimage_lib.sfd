@@ -1,0 +1,34 @@
+==copyright Copyright © 2002-2011 SPS
+==id $Id: capsimage_lib.sfd,v 4.2 2011/07/11 09:51:57 ville9 Exp $
+==base _CapsImageBase
+==bias 42
+==public
+==include <caps/capsimage.h>
+==include <caps/fdc.h>
+==include <caps/form.h>
+LONG CAPSInit() ()
+LONG CAPSExit() ()
+LONG CAPSAddImage() ()
+LONG CAPSRemImage(LONG id) (d0)
+LONG CAPSLockImage(LONG id, STRPTR name) (d0,a0)
+LONG CAPSLockImageMemory(LONG id, UBYTE *buffer, ULONG length, ULONG flag) (d0,a0,d1,d2)
+LONG CAPSUnlockImage(LONG id) (d0)
+LONG CAPSLoadImage(LONG id, ULONG flag) (d0,d1)
+LONG CAPSGetImageInfo(struct CapsImageInfo *pi, LONG id) (a0,d0)
+LONG CAPSLockTrack(APTR ptrackinfo, LONG id, ULONG cylinder, ULONG head, ULONG flag) (a0,d0,d1,d2,d3)
+LONG CAPSUnlockTrack(LONG id, ULONG cylinder, ULONG head) (d0,d1,d2)
+LONG CAPSUnlockAllTracks(LONG id) (d0)
+STRPTR CAPSGetPlatformName(ULONG pid) (d0)
+*--- functions in V2 or higher ---
+LONG CAPSGetVersionInfo(APTR pversioninfo, ULONG flag) (a0,d0)
+*--- functions in V4 or higher ---
+ULONG CAPSFdcGetInfo(LONG iid, struct CapsFdc *pc, LONG ext) (d0,a0,d1)
+LONG CAPSFdcInit(struct CapsFdc *pc) (a0)
+VOID CAPSFdcReset(struct CapsFdc *pc) (a0)
+VOID CAPSFdcEmulate(struct CapsFdc *pc, ULONG cyclecnt) (a0,d0)
+ULONG CAPSFdcRead(struct CapsFdc *pc, ULONG address) (a0,d0)
+VOID CAPSFdcWrite(struct CapsFdc *pc, ULONG address, ULONG data) (a0,d0,d1)
+LONG CAPSFdcInvalidateTrack(struct CapsFdc *pc, LONG drive) (a0,d0)
+LONG CAPSFormatDataToMFM(APTR pformattrack, ULONG flag) (a0,d0)
+LONG CAPSGetInfo(APTR pinfo, LONG id, ULONG cylinder, ULONG head, ULONG inftype, ULONG infid) (a0,d0,d1,d2,d3,d4)
+==end

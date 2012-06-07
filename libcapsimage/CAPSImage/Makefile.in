@@ -1,0 +1,59 @@
+distdir		= @host_cpu@-@host_os@-@PACKAGE@
+
+CC		= @CC@
+CXX		= @CXX@
+INSTALL		= @INSTALL@
+TAR		= @TAR@
+
+CFLAGS		= @CFLAGS@ @LIB_CFLAGS@ -I- -I@top_srcdir@/include -I@srcdir@
+CXXFLAGS	= @CXXFLAGS@ @LIB_CFLAGS@ -I- -I@top_srcdir@/include -I@srcdir@
+PICFLAGS	= @PICFLAGS@
+LDFLAGS		= @LDFLAGS@ @LIB_LDFLAGS@
+LIBS		= @LIB_LIBS@
+
+LIBRARY		= @LIBRARY@
+OBJECTS		= @EXTRA_OBJECTS@ afxgen.o CapsAPI.o CapsEFDC.o CapsEMFM.o CapsFile.o CapsImgS.o CapsLdr.o Crc.o DiskEnc.o DiskImg.o
+
+SUBDIRS		= include examples
+
+.PHONY: all clean distclean dist
+
+all: $(LIBRARY)
+	@for subdir in $(SUBDIRS); do (cd $$subdir && $(MAKE) $(MAKEFLAGS) $@) || exit; done
+
+$(LIBRARY): $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(PICFLAGS) $^ $(LIBS) -o $@
+
+devstart.o: devstart.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+capsimage.o: capsimage.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(PICFLAGS) -c $< -o $@
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $(PICFLAGS) -c $< -o $@
+
+clean:
+	$(RM) $(LIBRARY) $(OBJECTS)
+	@for subdir in $(SUBDIRS); do (cd $$subdir && $(MAKE) $(MAKEFLAGS) $@) || exit; done
+
+distclean:
+	$(RM) $(LIBRARY) $(OBJECTS) Makefile config.status config.log config.cache config.h
+	@for subdir in $(SUBDIRS); do (cd $$subdir && $(MAKE) $(MAKEFLAGS) $@) || exit; done
+
+dist: $(LIBRARY)
+	$(RM) -r $(distdir)
+	$(INSTALL) -d $(distdir)
+	$(INSTALL) -s $(LIBRARY) $(distdir)
+	$(INSTALL) HISTORY LICENSE README $(distdir)
+	@for subdir in $(SUBDIRS); do (cd $$subdir && $(MAKE) $(MAKEFLAGS) $@) || exit; done
+	$(TAR) czf $(distdir).tar.gz $(distdir)
+
+install:
+	mkdir -p $(DESTDIR)/usr/lib
+	mkdir -p $(DESTDIR)/usr/include/caps
+	cp libcapsimage.so.* $(DESTDIR)/usr/lib/
+	cp include/caps/*.h $(DESTDIR)/usr/include/caps/

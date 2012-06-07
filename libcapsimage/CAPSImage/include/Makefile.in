@@ -1,0 +1,39 @@
+distdir		= @top_srcdir@/@host_cpu@-@host_os@-@PACKAGE@/include
+
+SFD		= @SFD@
+FD2INLINE	= @FD2INLINE@
+AUTODOC		= @AUTODOC@
+INSTALL		= @INSTALL@
+
+STDHEADERS	= @STDHEADERS@
+GCCHEADERS	= @GCCHEADERS@
+AUTODOCS	= @AUTODOCS@
+
+DISTFILES	= caps/capsimage.h caps/fdc.h caps/form.h $(STDHEADERS) $(GCCHEADERS) $(AUTODOCS)
+
+.PHONY: all clean distclean dist
+
+all: $(STDHEADERS) $(GCCHEADERS) $(AUTODOCS)
+
+$(STDHEADERS): capsimage_lib.sfd
+	$(SFD) -h $^
+
+inline/capsimage.h: FD/capsimage_lib.fd PROTOS/capsimage_protos.h
+	mkdir -p $(@D) && $(FD2INLINE) $^ -o $@
+
+proto/capsimage.h: FD/capsimage_lib.fd
+	mkdir -p $(@D) && $(FD2INLINE) --proto $^ -o $@
+
+autodocs/capsimage.doc: ../capsimage.c
+	mkdir -p $(@D) && $(AUTODOC) -C -I $(addprefix /,$(^F)) > $@
+
+clean:
+	$(RM) $(STDHEADERS) $(GCCHEADERS) $(AUTODOCS)
+
+distclean: clean
+	$(RM) Makefile
+
+dist: $(DISTFILES)
+	for dir in $(dir $(DISTFILES)); do $(INSTALL) -d $(distdir)/$$dir; done
+	for file in $(DISTFILES); do $(INSTALL) $$file $(distdir)/$$file; done
+

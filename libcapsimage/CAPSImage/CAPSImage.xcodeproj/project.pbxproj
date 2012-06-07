@@ -1,0 +1,489 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+		E8872B6C13C9400E00DE4A1F /* crc.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872B6B13C9400E00DE4A1F /* crc.h */; };
+		E8872B9013C9429D00DE4A1F /* capsimage.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872B8F13C9429D00DE4A1F /* capsimage.h */; };
+		E8872B9513C942D400DE4A1F /* Capsdef.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872B9413C942D400DE4A1F /* Capsdef.h */; };
+		E8872B9D13C9433300DE4A1F /* CapsFile.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872B9C13C9433300DE4A1F /* CapsFile.h */; };
+		E8872BA413C9437600DE4A1F /* DiskEnc.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BA313C9437600DE4A1F /* DiskEnc.h */; };
+		E8872BAB13C99A6100DE4A1F /* DiskImg.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BAA13C99A6100DE4A1F /* DiskImg.h */; };
+		E8872BB013C99A9000DE4A1F /* CapsLdr.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BAF13C99A9000DE4A1F /* CapsLdr.h */; };
+		E8872BB513C99AC500DE4A1F /* CapsImgS.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BB413C99AC500DE4A1F /* CapsImgS.h */; };
+		E8872BB913C99AFF00DE4A1F /* fdc.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BB813C99AFF00DE4A1F /* fdc.h */; };
+		E8872BD413C99F5A00DE4A1F /* CapsEFDC.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BD313C99F5A00DE4A1F /* CapsEFDC.h */; };
+		E8872BD813C99F8D00DE4A1F /* form.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BD713C99F8D00DE4A1F /* form.h */; };
+		E8872BDD13C99FAD00DE4A1F /* CapsEMFM.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BDC13C99FAD00DE4A1F /* CapsEMFM.h */; };
+		E8872BE213C99FDE00DE4A1F /* CapsCore.h in Headers */ = {isa = PBXBuildFile; fileRef = E8872BE113C99FDE00DE4A1F /* CapsCore.h */; };
+		E8872BE913C9A81500DE4A1F /* CapsAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872BE713C9A81500DE4A1F /* CapsAPI.cpp */; };
+		E8872C0813C9ABAB00DE4A1F /* CapsEFDC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C0713C9ABAB00DE4A1F /* CapsEFDC.cpp */; };
+		E8872C0D13C9ABFC00DE4A1F /* CapsEMFM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C0C13C9ABFC00DE4A1F /* CapsEMFM.cpp */; };
+		E8872C1213C9AC6400DE4A1F /* CapsFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C1113C9AC6400DE4A1F /* CapsFile.cpp */; };
+		E8872C1713C9AD1600DE4A1F /* CapsImgS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C1613C9AD1600DE4A1F /* CapsImgS.cpp */; };
+		E8872C1C13C9AD5700DE4A1F /* CapsLdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C1B13C9AD5700DE4A1F /* CapsLdr.cpp */; };
+		E8872C2113C9AD8A00DE4A1F /* Crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C2013C9AD8A00DE4A1F /* Crc.cpp */; };
+		E8872C2613C9ADB400DE4A1F /* DiskEnc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C2513C9ADB400DE4A1F /* DiskEnc.cpp */; };
+		E8872C2B13C9ADD300DE4A1F /* DiskImg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8872C2A13C9ADD300DE4A1F /* DiskImg.cpp */; };
+		E8872C5B13C9B62000DE4A1F /* ipfinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = E8872C5A13C9B62000DE4A1F /* ipfinfo.c */; };
+		E8872D4A13CA670200DE4A1F /* CAPSImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC2EF5B0486A6940098B216 /* CAPSImage.framework */; };
+		E8B26A7013C86DF900795BB2 /* afxgen.h in Headers */ = {isa = PBXBuildFile; fileRef = E8B26A6E13C86DF900795BB2 /* afxgen.h */; };
+		E8B26A7113C86DF900795BB2 /* afxgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B26A6F13C86DF900795BB2 /* afxgen.cpp */; };
+		E8B26A9813C8719B00795BB2 /* stdafx.h in Headers */ = {isa = PBXBuildFile; fileRef = E8B26A9713C8719B00795BB2 /* stdafx.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* CAPSImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CAPSImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8872B6B13C9400E00DE4A1F /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc.h; sourceTree = "<group>"; };
+		E8872B8F13C9429D00DE4A1F /* capsimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = capsimage.h; path = include/caps/capsimage.h; sourceTree = "<group>"; };
+		E8872B9413C942D400DE4A1F /* Capsdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capsdef.h; sourceTree = "<group>"; };
+		E8872B9C13C9433300DE4A1F /* CapsFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapsFile.h; sourceTree = "<group>"; };
+		E8872BA313C9437600DE4A1F /* DiskEnc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskEnc.h; sourceTree = "<group>"; };
+		E8872BAA13C99A6100DE4A1F /* DiskImg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImg.h; sourceTree = "<group>"; };
+		E8872BAF13C99A9000DE4A1F /* CapsLdr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapsLdr.h; sourceTree = "<group>"; };
+		E8872BB413C99AC500DE4A1F /* CapsImgS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapsImgS.h; sourceTree = "<group>"; };
+		E8872BB813C99AFF00DE4A1F /* fdc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fdc.h; path = include/caps/fdc.h; sourceTree = "<group>"; };
+		E8872BD313C99F5A00DE4A1F /* CapsEFDC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapsEFDC.h; sourceTree = "<group>"; };
+		E8872BD713C99F8D00DE4A1F /* form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = form.h; path = include/caps/form.h; sourceTree = "<group>"; };
+		E8872BDC13C99FAD00DE4A1F /* CapsEMFM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapsEMFM.h; sourceTree = "<group>"; };
+		E8872BE113C99FDE00DE4A1F /* CapsCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapsCore.h; sourceTree = "<group>"; };
+		E8872BE713C9A81500DE4A1F /* CapsAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CapsAPI.cpp; sourceTree = "<group>"; };
+		E8872C0713C9ABAB00DE4A1F /* CapsEFDC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CapsEFDC.cpp; sourceTree = "<group>"; };
+		E8872C0C13C9ABFC00DE4A1F /* CapsEMFM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CapsEMFM.cpp; sourceTree = "<group>"; };
+		E8872C1113C9AC6400DE4A1F /* CapsFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CapsFile.cpp; sourceTree = "<group>"; };
+		E8872C1613C9AD1600DE4A1F /* CapsImgS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CapsImgS.cpp; sourceTree = "<group>"; };
+		E8872C1B13C9AD5700DE4A1F /* CapsLdr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CapsLdr.cpp; sourceTree = "<group>"; };
+		E8872C2013C9AD8A00DE4A1F /* Crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Crc.cpp; sourceTree = "<group>"; };
+		E8872C2513C9ADB400DE4A1F /* DiskEnc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskEnc.cpp; sourceTree = "<group>"; };
+		E8872C2A13C9ADD300DE4A1F /* DiskImg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImg.cpp; sourceTree = "<group>"; };
+		E8872C5413C9B59500DE4A1F /* IPFInfo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IPFInfo; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8872C5A13C9B62000DE4A1F /* ipfinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ipfinfo.c; path = examples/ipfinfo.c; sourceTree = "<group>"; };
+		E8872CAA13C9BAC800DE4A1F /* CAPSImage_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPSImage_Prefix.pch; sourceTree = "<group>"; };
+		E8B26A6E13C86DF900795BB2 /* afxgen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = afxgen.h; sourceTree = "<group>"; };
+		E8B26A6F13C86DF900795BB2 /* afxgen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = afxgen.cpp; sourceTree = "<group>"; };
+		E8B26A9713C8719B00795BB2 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdafx.h; path = include/stdafx.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8872C5213C9B59500DE4A1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8872D4A13CA670200DE4A1F /* CAPSImage.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* CAPSImage.framework */,
+				E8872C5413C9B59500DE4A1F /* IPFInfo */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* CAPSImage */ = {
+			isa = PBXGroup;
+			children = (
+				E8B26A9613C8718000795BB2 /* include */,
+				E8872CA713C9BA7A00DE4A1F /* Other Sources */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				034768DFFF38A50411DB9C8B /* Products */,
+				E8B26A6E13C86DF900795BB2 /* afxgen.h */,
+				E8B26A6F13C86DF900795BB2 /* afxgen.cpp */,
+				E8872B6B13C9400E00DE4A1F /* crc.h */,
+				E8872B9413C942D400DE4A1F /* Capsdef.h */,
+				E8872B9C13C9433300DE4A1F /* CapsFile.h */,
+				E8872BA313C9437600DE4A1F /* DiskEnc.h */,
+				E8872BAA13C99A6100DE4A1F /* DiskImg.h */,
+				E8872BAF13C99A9000DE4A1F /* CapsLdr.h */,
+				E8872BB413C99AC500DE4A1F /* CapsImgS.h */,
+				E8872BD313C99F5A00DE4A1F /* CapsEFDC.h */,
+				E8872BDC13C99FAD00DE4A1F /* CapsEMFM.h */,
+				E8872BE113C99FDE00DE4A1F /* CapsCore.h */,
+				E8872BE713C9A81500DE4A1F /* CapsAPI.cpp */,
+				E8872C0713C9ABAB00DE4A1F /* CapsEFDC.cpp */,
+				E8872C0C13C9ABFC00DE4A1F /* CapsEMFM.cpp */,
+				E8872C1113C9AC6400DE4A1F /* CapsFile.cpp */,
+				E8872C1613C9AD1600DE4A1F /* CapsImgS.cpp */,
+				E8872C1B13C9AD5700DE4A1F /* CapsLdr.cpp */,
+				E8872C2013C9AD8A00DE4A1F /* Crc.cpp */,
+				E8872C2513C9ADB400DE4A1F /* DiskEnc.cpp */,
+				E8872C2A13C9ADD300DE4A1F /* DiskImg.cpp */,
+				E8872C5A13C9B62000DE4A1F /* ipfinfo.c */,
+			);
+			name = CAPSImage;
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		E8872B8813C9423600DE4A1F /* caps */ = {
+			isa = PBXGroup;
+			children = (
+				E8872B8F13C9429D00DE4A1F /* capsimage.h */,
+				E8872BB813C99AFF00DE4A1F /* fdc.h */,
+				E8872BD713C99F8D00DE4A1F /* form.h */,
+			);
+			name = caps;
+			sourceTree = "<group>";
+		};
+		E8872CA713C9BA7A00DE4A1F /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E8872CAA13C9BAC800DE4A1F /* CAPSImage_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		E8B26A9613C8718000795BB2 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E8872B8813C9423600DE4A1F /* caps */,
+				E8B26A9713C8719B00795BB2 /* stdafx.h */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8B26A7013C86DF900795BB2 /* afxgen.h in Headers */,
+				E8B26A9813C8719B00795BB2 /* stdafx.h in Headers */,
+				E8872B6C13C9400E00DE4A1F /* crc.h in Headers */,
+				E8872B9013C9429D00DE4A1F /* capsimage.h in Headers */,
+				E8872B9513C942D400DE4A1F /* Capsdef.h in Headers */,
+				E8872B9D13C9433300DE4A1F /* CapsFile.h in Headers */,
+				E8872BA413C9437600DE4A1F /* DiskEnc.h in Headers */,
+				E8872BAB13C99A6100DE4A1F /* DiskImg.h in Headers */,
+				E8872BB013C99A9000DE4A1F /* CapsLdr.h in Headers */,
+				E8872BB513C99AC500DE4A1F /* CapsImgS.h in Headers */,
+				E8872BB913C99AFF00DE4A1F /* fdc.h in Headers */,
+				E8872BD413C99F5A00DE4A1F /* CapsEFDC.h in Headers */,
+				E8872BD813C99F8D00DE4A1F /* form.h in Headers */,
+				E8872BDD13C99FAD00DE4A1F /* CapsEMFM.h in Headers */,
+				E8872BE213C99FDE00DE4A1F /* CapsCore.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DC2EF4F0486A6940098B216 /* CAPSImage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "CAPSImage" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CAPSImage;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = CAPSImage;
+			productReference = 8DC2EF5B0486A6940098B216 /* CAPSImage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E8872C5313C9B59500DE4A1F /* IPFInfo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8872C5813C9B5B300DE4A1F /* Build configuration list for PBXNativeTarget "IPFInfo" */;
+			buildPhases = (
+				E8872C5113C9B59500DE4A1F /* Sources */,
+				E8872C5213C9B59500DE4A1F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = IPFInfo;
+			productName = IPFInfo;
+			productReference = E8872C5413C9B59500DE4A1F /* IPFInfo */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = SPS;
+			};
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "CAPSImage" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* CAPSImage */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* CAPSImage */,
+				E8872C5313C9B59500DE4A1F /* IPFInfo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8B26A7113C86DF900795BB2 /* afxgen.cpp in Sources */,
+				E8872BE913C9A81500DE4A1F /* CapsAPI.cpp in Sources */,
+				E8872C0813C9ABAB00DE4A1F /* CapsEFDC.cpp in Sources */,
+				E8872C0D13C9ABFC00DE4A1F /* CapsEMFM.cpp in Sources */,
+				E8872C1213C9AC6400DE4A1F /* CapsFile.cpp in Sources */,
+				E8872C1713C9AD1600DE4A1F /* CapsImgS.cpp in Sources */,
+				E8872C1C13C9AD5700DE4A1F /* CapsLdr.cpp in Sources */,
+				E8872C2113C9AD8A00DE4A1F /* Crc.cpp in Sources */,
+				E8872C2613C9ADB400DE4A1F /* DiskEnc.cpp in Sources */,
+				E8872C2B13C9ADD300DE4A1F /* DiskImg.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8872C5113C9B59500DE4A1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8872C5B13C9B62000DE4A1F /* ipfinfo.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = CAPSImage_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				PRODUCT_NAME = CAPSImage;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = CAPSImage_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				PRODUCT_NAME = CAPSImage;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+					x86_64,
+				);
+				CURRENT_PROJECT_VERSION = 4.2;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DYLIB_COMPATIBILITY_VERSION = 4.2;
+				DYLIB_CURRENT_VERSION = 4.2;
+				EXPORTED_SYMBOLS_FILE = capsimage.exp;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"-",
+					include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fomit-frame-pointer";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fconserve-space",
+					"-fno-for-scope",
+				);
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				STRIP_STYLE = "non-global";
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+					x86_64,
+				);
+				CURRENT_PROJECT_VERSION = 4.2;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DYLIB_COMPATIBILITY_VERSION = 4.2;
+				DYLIB_CURRENT_VERSION = 4.2;
+				EXPORTED_SYMBOLS_FILE = capsimage.exp;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"-",
+					include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fomit-frame-pointer";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fconserve-space",
+					"-fno-for-scope",
+				);
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				STRIP_STYLE = "non-global";
+			};
+			name = Release;
+		};
+		E8872C5613C9B59500DE4A1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = IPFInfo;
+			};
+			name = Debug;
+		};
+		E8872C5713C9B59500DE4A1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = IPFInfo;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "CAPSImage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "CAPSImage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8872C5813C9B5B300DE4A1F /* Build configuration list for PBXNativeTarget "IPFInfo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8872C5613C9B59500DE4A1F /* Debug */,
+				E8872C5713C9B59500DE4A1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

@@ -1,0 +1,22 @@
+IPF DECODER LIBRARY (CLL) v4.2 release package
+
+This distribution contains the source code for the IPF DECODER LIBRARY. This not free software, please read the licence.
+
+Contents:
+
+CLL: This is the main source tree with the latest version prepared for compilation under Windows.
+CAPSImage: This is a fork of the main tree with ports to other systems like Mac OS X, Linux and Amiga OS. 
+
+Changes to functionality should only be made to the main fork and then ported forward.
+
+
+If you encounter any problems, please let us know by posting here:
+
+http://forum.kryoflux.com
+
+
+Please use the forums for bug reports, do not submit tickets for this.
+
+
+Thank you for your support,
+The Software Preservation Society
