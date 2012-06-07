@@ -165,6 +165,7 @@ int fs_ml_video_mode_get_current(fs_ml_video_mode *mode) {
     mode->fps = 30;
     mode->bpp = 16;
     mode->flags = 0;
+    return 0;
 #endif
     mode->width = 0;
     mode->height = 0;
